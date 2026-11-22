@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EcoSim Lab — 100 Days of AI &amp; Environmental Simulations</title>
+  <title>EcoSim — Daily AI &amp; Environmental Simulations</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <script>
@@ -14,917 +14,144 @@
       theme: {
         extend: {
           fontFamily: {
+            serif: ['Fraunces', 'Georgia', 'serif'],
             sans: ['Inter', 'system-ui', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
-            obsidian: '#070D0B',
-            pine: '#0D1714',
-            emeraldGlow: '#10B981',
-            amberGlow: '#F59E0B',
+            canvas: '#080C0B',
+            surface: '#0F1513',
           }
         }
       }
     };
   </script>
   <style>
-    body {
-      background-color: #070D0B;
-      color: #ECFDF5;
+    html, body {
+      background-color: #080C0B;
+      color: #F0F7F4;
       font-family: 'Inter', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
     }
-    .glass-panel {
-      background: rgba(13, 23, 20, 0.78);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(52, 211, 153, 0.16);
+    .nav-pill {
+      transition: color 0.2s ease, background-color 0.2s ease;
     }
-    .card-hover {
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-3px);
-      border-color: rgba(16, 185, 129, 0.45);
-      box-shadow: 0 12px 32px -12px rgba(16, 185, 129, 0.22);
-    }
-    input[type="range"] {
-      accent-color: #10B981;
+    .nav-pill.active {
+      background-color: rgba(52, 211, 153, 0.14);
+      color: #6EE7B7;
     }
   </style>
 </head>
-<body class="min-h-screen antialiased selection:bg-emerald-500/30 selection:text-emerald-100">
+<body class="flex min-h-screen flex-col antialiased selection:bg-emerald-500/30 selection:text-emerald-100">
 
-  <!-- Top Navigation -->
-  <header class="sticky top-0 z-40 border-b border-emerald-500/15 bg-obsidian/85 backdrop-blur-md">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
-      <a href="#top" class="flex items-center gap-2.5 text-emerald-50">
-        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-500/30">
-          <i data-lucide="orbit" class="h-4 w-4"></i>
-        </span>
-        <span class="font-bold tracking-tight text-base sm:text-lg">EcoSim Lab</span>
+  <!-- Shared Minimal Header -->
+  <header class="sticky top-0 z-40 border-b border-white/[0.06] bg-canvas/80 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3.5 sm:px-6">
+      <a href="index.html" class="flex items-center gap-2.5 text-white">
+        <span class="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.85)]"></span>
+        <span class="font-serif text-lg tracking-tight">EcoSim</span>
       </a>
 
-      <nav class="hidden items-center gap-6 text-sm font-medium text-emerald-100/75 md:flex">
-        <a href="#simulations" class="transition hover:text-emerald-300">Simulations</a>
-        <a href="#roadmap" class="transition hover:text-emerald-300">5-Phase Arc</a>
-        <a href="#about" class="transition hover:text-emerald-300">About Series</a>
+      <nav class="flex items-center gap-1 rounded-full border border-white/[0.08] bg-surface/80 p-1 text-xs sm:text-sm">
+        <a href="index.html" class="nav-pill active rounded-full px-3 py-1.5 font-medium">Home</a>
+        <a href="library.html" class="nav-pill rounded-full px-3 py-1.5 font-medium text-white/70 hover:text-white">Library</a>
+        <a href="day-01.html" class="nav-pill rounded-full px-3 py-1.5 font-medium text-white/70 hover:text-white">Day 01</a>
+        <a href="roadmap.html" class="nav-pill rounded-full px-3 py-1.5 font-medium text-white/70 hover:text-white">Roadmap</a>
       </nav>
-
-      <div class="flex items-center gap-3">
-        <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 font-mono text-xs font-medium text-emerald-300">
-          DAY <span id="navLiveCount">01</span> / 100
-        </span>
-        <button id="openDay1NavBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500 px-3.5 py-1.5 text-xs font-semibold text-obsidian transition hover:bg-emerald-400 sm:text-sm">
-          <i data-lucide="play" class="h-3.5 w-3.5 fill-current"></i>
-          <span>Play Day 01</span>
-        </button>
-      </div>
     </div>
   </header>
 
-  <!-- Hero Section with Live Interactive Gravity Canvas -->
-  <section id="top" class="relative overflow-hidden border-b border-emerald-500/15">
-    <canvas id="heroCanvas" class="absolute inset-0 h-full w-full opacity-80"></canvas>
-    <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-obsidian/35 via-obsidian/55 to-obsidian"></div>
+  <!-- Full-Viewport Home Hero -->
+  <main class="relative flex-1 overflow-hidden">
+    <canvas id="ambientCanvas" class="pointer-events-none absolute inset-0 h-full w-full"></canvas>
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(16,185,129,0.09),transparent_62%)]"></div>
 
-    <div class="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-      <div class="max-w-3xl">
-        <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-pine/80 px-3.5 py-1.5 text-xs font-medium text-emerald-200 backdrop-blur">
-          <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>Building 100 interactive AI &amp; environmental simulations — one every day</span>
-        </div>
+    <div class="relative z-10 mx-auto flex min-h-[calc(100vh-61px)] max-w-3xl flex-col items-center justify-center px-5 py-16 text-center">
+      <span class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 font-mono text-xs text-emerald-300/90 backdrop-blur">
+        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+        <span>DAY 01 OF 100 · LIVE IN BROWSER</span>
+      </span>
 
-        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.08]">
-          From Gravity &amp; Matter to a <span class="text-emerald-400">Living Planet</span>
-        </h1>
+      <h1 class="font-serif text-4xl font-normal tracking-tight text-white sm:text-6xl leading-[1.08]">
+        One living simulation,<br />every single day.
+      </h1>
 
-        <p class="mt-5 max-w-2xl text-base leading-relaxed text-emerald-100/80 sm:text-lg">
-          Every day I code a new browser-based physics, ecosystem, or AI environmental simulation from scratch and document the build on YouTube. Move your cursor to bend the orbital field, or launch Day 001 right now.
-        </p>
+      <p class="mt-6 max-w-lg text-base leading-relaxed text-white/65 sm:text-lg">
+        A quiet digital lab exploring gravity, weather, terrain, evolving ecosystems, and AI climate models—built from scratch and shared daily on YouTube.
+      </p>
 
-        <div class="mt-8 flex flex-wrap items-center gap-3.5">
-          <button id="openDay1HeroBtn" type="button" class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-obsidian shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400">
-            <i data-lucide="sparkles" class="h-4 w-4"></i>
-            <span>Launch Day 001: Gravity Sandbox</span>
-          </button>
-          <a href="#simulations" class="inline-flex items-center gap-2 rounded-xl border border-emerald-400/25 bg-pine/80 px-5 py-3 text-sm font-semibold text-emerald-100 transition hover:border-emerald-400/50 hover:bg-pine">
-            <i data-lucide="layout-grid" class="h-4 w-4"></i>
-            <span>Browse All Simulations</span>
-          </a>
-        </div>
-
-        <!-- Compact Metrics Strip -->
-        <div class="mt-10 grid max-w-xl grid-cols-3 gap-4 border-t border-emerald-500/15 pt-6">
-          <div>
-            <div class="font-mono text-2xl font-bold text-white" id="statLive">1</div>
-            <div class="text-xs text-emerald-200/70">Live Playable</div>
-          </div>
-          <div>
-            <div class="font-mono text-2xl font-bold text-emerald-400">5</div>
-            <div class="text-xs text-emerald-200/70">Progressive Phases</div>
-          </div>
-          <div>
-            <div class="font-mono text-2xl font-bold text-amber-400">100%</div>
-            <div class="text-xs text-emerald-200/70">Browser-Native JS</div>
-          </div>
-        </div>
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-3.5">
+        <a href="day-01.html" class="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-6 py-3 text-sm font-semibold text-canvas shadow-[0_0_28px_rgba(52,211,153,0.28)] transition hover:bg-emerald-300">
+          <span>Enter Day 001</span>
+          <i data-lucide="arrow-right" class="h-4 w-4"></i>
+        </a>
+        <a href="library.html" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-sm font-medium text-white/90 transition hover:border-white/30 hover:bg-white/[0.08]">
+          <span>Browse Library</span>
+        </a>
       </div>
+
+      <a href="roadmap.html" class="mt-14 inline-flex items-center gap-2 text-xs text-white/45 transition hover:text-emerald-300">
+        <span>See the 5-phase journey from Matter to AI</span>
+        <i data-lucide="chevron-right" class="h-3.5 w-3.5"></i>
+      </a>
     </div>
-  </section>
-
-  <!-- Main Simulation Gallery -->
-  <section id="simulations" class="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
-    <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-      <div>
-        <h2 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Simulation Archive</h2>
-        <p class="mt-1.5 text-sm text-emerald-100/70">Filter by phase or search any physics, ecosystem, or AI topic. New builds unlock daily.</p>
-      </div>
-
-      <div class="relative w-full md:w-72">
-        <i data-lucide="search" class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-300/60"></i>
-        <input id="searchInput" type="search" placeholder="Search gravity, wildfire, RL..." class="w-full rounded-xl border border-emerald-500/20 bg-pine py-2.5 pl-10 pr-4 text-sm text-emerald-50 placeholder-emerald-200/45 outline-none transition focus:border-emerald-400/60" />
-      </div>
-    </div>
-
-    <!-- Phase Filter Buttons -->
-    <div id="phaseFilters" class="mt-6 flex flex-wrap gap-2">
-      <button type="button" data-phase="all" class="phase-btn rounded-lg border border-emerald-400 bg-emerald-500/20 px-3.5 py-1.5 text-xs font-semibold text-emerald-200 transition">All Phases</button>
-      <button type="button" data-phase="1" class="phase-btn rounded-lg border border-emerald-500/20 bg-pine px-3.5 py-1.5 text-xs font-medium text-emerald-100/75 transition hover:border-emerald-400/40">1 · Matter &amp; Gravity</button>
-      <button type="button" data-phase="2" class="phase-btn rounded-lg border border-emerald-500/20 bg-pine px-3.5 py-1.5 text-xs font-medium text-emerald-100/75 transition hover:border-emerald-400/40">2 · Fluids &amp; Weather</button>
-      <button type="button" data-phase="3" class="phase-btn rounded-lg border border-emerald-500/20 bg-pine px-3.5 py-1.5 text-xs font-medium text-emerald-100/75 transition hover:border-emerald-400/40">3 · Terrain &amp; Earth</button>
-      <button type="button" data-phase="4" class="phase-btn rounded-lg border border-emerald-500/20 bg-pine px-3.5 py-1.5 text-xs font-medium text-emerald-100/75 transition hover:border-emerald-400/40">4 · Ecosystems &amp; Swarms</button>
-      <button type="button" data-phase="5" class="phase-btn rounded-lg border border-emerald-500/20 bg-pine px-3.5 py-1.5 text-xs font-medium text-emerald-100/75 transition hover:border-emerald-400/40">5 · Human &amp; Climate AI</button>
-    </div>
-
-    <!-- Result Count -->
-    <div class="mt-4 flex items-center justify-between text-xs text-emerald-200/60">
-      <span id="resultsMeta">Showing 15 featured simulations</span>
-      <button id="toggleLiveOnlyBtn" type="button" class="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/20 bg-pine px-2.5 py-1 text-emerald-200/80 transition hover:border-emerald-400/40">
-        <span id="liveOnlyDot" class="h-2 w-2 rounded-full bg-emerald-500/40"></span>
-        <span>Live only</span>
-      </button>
-    </div>
-
-    <!-- Cards Grid -->
-    <div id="simGrid" class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
-  </section>
-
-  <!-- 5-Phase Progression Arc -->
-  <section id="roadmap" class="border-t border-emerald-500/15 bg-pine/55 py-14 sm:py-20">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6">
-      <h2 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">The 5-Phase Architecture</h2>
-      <p class="mt-2 max-w-2xl text-sm text-emerald-100/75">Every 20-day phase reuses the math, rendering, and agent utilities built in earlier episodes—scaling cleanly from Day 1 particles to Day 100 planetary stewardship.</p>
-
-      <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-5">
-        <div class="rounded-2xl border border-emerald-500/25 bg-obsidian/80 p-5">
-          <div class="font-mono text-xs text-emerald-400">DAYS 001–020</div>
-          <h3 class="mt-2 font-bold text-white">Matter &amp; Gravity</h3>
-          <p class="mt-1.5 text-xs leading-relaxed text-emerald-100/70">N-body orbits, rigid collisions, states of matter, wave interference, and heat PDEs.</p>
-          <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-emerald-950">
-            <div class="h-full w-[5%] rounded-full bg-emerald-400"></div>
-          </div>
-        </div>
-        <div class="rounded-2xl border border-emerald-500/15 bg-obsidian/65 p-5">
-          <div class="font-mono text-xs text-teal-400">DAYS 021–040</div>
-          <h3 class="mt-2 font-bold text-white">Fluids &amp; Weather</h3>
-          <p class="mt-1.5 text-xs leading-relaxed text-emerald-100/70">Navier-Stokes wind, SPH splashes, cyclones, greenhouse trapping, and AI rain nowcasting.</p>
-          <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-emerald-950">
-            <div class="h-full w-0 rounded-full bg-teal-400"></div>
-          </div>
-        </div>
-        <div class="rounded-2xl border border-emerald-500/15 bg-obsidian/65 p-5">
-          <div class="font-mono text-xs text-cyan-400">DAYS 041–060</div>
-          <h3 class="mt-2 font-bold text-white">Terrain &amp; Earth</h3>
-          <p class="mt-1.5 text-xs leading-relaxed text-emerald-100/70">Hydraulic erosion, plate tectonics, watersheds, permafrost thaw, and wildfire cellular grids.</p>
-          <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-emerald-950">
-            <div class="h-full w-0 rounded-full bg-cyan-400"></div>
-          </div>
-        </div>
-        <div class="rounded-2xl border border-emerald-500/15 bg-obsidian/65 p-5">
-          <div class="font-mono text-xs text-lime-400">DAYS 061–080</div>
-          <h3 class="mt-2 font-bold text-white">Ecosystems &amp; Swarms</h3>
-          <p class="mt-1.5 text-xs leading-relaxed text-emerald-100/70">Predator-prey cycles, Boids, slime molds, neuroevolution herbivores, and Q-learning foragers.</p>
-          <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-emerald-950">
-            <div class="h-full w-0 rounded-full bg-lime-400"></div>
-          </div>
-        </div>
-        <div class="rounded-2xl border border-amber-500/20 bg-obsidian/65 p-5">
-          <div class="font-mono text-xs text-amber-400">DAYS 081–100</div>
-          <h3 class="mt-2 font-bold text-white">Human &amp; Climate AI</h3>
-          <p class="mt-1.5 text-xs leading-relaxed text-emerald-100/70">Urban heat islands, wildfire drone swarms, microgrid RL, and Day 100's Living Planet.</p>
-          <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-emerald-950">
-            <div class="h-full w-0 rounded-full bg-amber-400"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- About / Community Section -->
-  <section id="about" class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-    <div class="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-      <div class="max-w-xl">
-        <h2 class="text-xl font-bold text-white sm:text-2xl">Suggest Tomorrow's Simulation</h2>
-        <p class="mt-2 text-sm leading-relaxed text-emerald-100/75">
-          Every simulation here runs 100% locally in your browser with zero tracking and zero server lag. Follow the daily build logs on YouTube and comment which environmental system you want to see coded next.
-        </p>
-      </div>
-      <div class="flex flex-wrap gap-3">
-        <button id="openDay1FooterBtn" type="button" class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-obsidian transition hover:bg-emerald-400">
-          <i data-lucide="orbit" class="h-4 w-4"></i>
-          <span>Try Day 001 Sandbox</span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <footer class="border-t border-emerald-500/15 py-8 text-center text-xs text-emerald-200/50">
-    <div class="mx-auto max-w-6xl px-4">
-      EcoSim Lab · Built in public, one daily simulation at a time.
-    </div>
-  </footer>
-
-  <!-- Interactive Day 001 Gravity Sandbox Modal -->
-  <div id="sandboxModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-3 backdrop-blur-sm sm:p-6">
-    <div class="flex h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-emerald-500/30 bg-obsidian shadow-2xl">
-      <!-- Modal Header -->
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-500/15 bg-pine px-4 py-3 sm:px-5">
-        <div class="flex items-center gap-3">
-          <span class="rounded-md bg-emerald-500/20 px-2 py-0.5 font-mono text-xs font-semibold text-emerald-300">DAY 001</span>
-          <h3 class="text-sm font-bold text-white sm:text-base">Point-Mass Gravity Sandbox</h3>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="hidden font-mono text-xs text-emerald-200/70 sm:inline">Bodies: <strong id="bodyCountReadout" class="text-emerald-300">0</strong></span>
-          <button id="closeSandboxBtn" type="button" class="rounded-lg border border-emerald-500/25 bg-obsidian px-3 py-1.5 text-xs font-medium text-emerald-100 transition hover:border-emerald-400">
-            Close
-          </button>
-        </div>
-      </div>
-
-      <!-- Canvas Viewport -->
-      <div class="relative flex-1 bg-obsidian">
-        <canvas id="gravityCanvas" class="h-full w-full cursor-crosshair block"></canvas>
-        <div class="pointer-events-none absolute left-4 top-3 rounded-lg bg-obsidian/75 px-3 py-1.5 text-xs text-emerald-200/80 ring-1 ring-emerald-500/20 backdrop-blur">
-          Click &amp; drag anywhere to sling a new planet into orbit
-        </div>
-      </div>
-
-      <!-- Simulation Controls Bar -->
-      <div class="flex flex-wrap items-center justify-between gap-3 border-t border-emerald-500/15 bg-pine px-4 py-3 sm:px-5">
-        <div class="flex flex-wrap items-center gap-2">
-          <button id="simPlayPauseBtn" type="button" class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-obsidian transition hover:bg-emerald-400">
-            Pause
-          </button>
-          <button id="presetSolarBtn" type="button" class="rounded-lg border border-emerald-500/25 bg-obsidian px-2.5 py-1.5 text-xs text-emerald-100 transition hover:border-emerald-400">Solar System</button>
-          <button id="presetBinaryBtn" type="button" class="rounded-lg border border-emerald-500/25 bg-obsidian px-2.5 py-1.5 text-xs text-emerald-100 transition hover:border-emerald-400">Binary Star</button>
-          <button id="presetClearBtn" type="button" class="rounded-lg border border-rose-500/30 bg-obsidian px-2.5 py-1.5 text-xs text-rose-200 transition hover:border-rose-400">Clear</button>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-4 text-xs text-emerald-100/80">
-          <label class="flex items-center gap-2">
-            <span>Gravity</span>
-            <input id="gravitySlider" type="range" min="0.2" max="2.5" step="0.1" value="1.0" class="w-24" />
-            <span id="gravityVal" class="font-mono text-emerald-300 w-7">1.0x</span>
-          </label>
-          <label class="flex items-center gap-2">
-            <span>Mass</span>
-            <input id="massSlider" type="range" min="1" max="25" step="1" value="6" class="w-20" />
-            <span id="massVal" class="font-mono text-emerald-300 w-6">6</span>
-          </label>
-          <label class="flex items-center gap-1.5 cursor-pointer">
-            <input id="trailsToggle" type="checkbox" checked class="accent-emerald-500" />
-            <span>Trails</span>
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Info Modal for Upcoming Simulations -->
-  <div id="infoModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
-    <div class="w-full max-w-lg rounded-2xl border border-emerald-500/25 bg-pine p-6 shadow-2xl">
-      <div class="flex items-start justify-between gap-4">
-        <div>
-          <span id="infoDayBadge" class="rounded-md bg-emerald-500/15 px-2.5 py-0.5 font-mono text-xs font-semibold text-emerald-300">DAY 002</span>
-          <h3 id="infoTitle" class="mt-2 text-xl font-bold text-white">Simulation Title</h3>
-        </div>
-        <button id="closeInfoBtn" type="button" class="rounded-lg border border-emerald-500/20 px-2.5 py-1 text-xs text-emerald-200 hover:border-emerald-400">Close</button>
-      </div>
-      <div class="mt-4 space-y-3 text-sm">
-        <div class="rounded-xl border border-emerald-500/15 bg-obsidian/70 p-3.5">
-          <div class="font-mono text-[11px] text-emerald-400">CORE PHYSICS / AI ENGINE</div>
-          <div id="infoEngine" class="mt-1 text-emerald-50 font-medium"></div>
-        </div>
-        <div class="rounded-xl border border-emerald-500/15 bg-obsidian/70 p-3.5">
-          <div class="font-mono text-[11px] text-amber-400">INTERACTIVE VIEWER HOOK</div>
-          <div id="infoHook" class="mt-1 text-emerald-100/85"></div>
-        </div>
-      </div>
-      <p class="mt-4 text-xs text-emerald-200/65">This episode is queued in the 100-day build roadmap. Once coded, flip <code class="font-mono text-emerald-300">status: "live"</code> in the site's <code class="font-mono text-emerald-300">SIMULATIONS</code> list.</p>
-    </div>
-  </div>
+  </main>
 
   <script>
-    // =========================================================================
-    // MODULAR SIMULATION REGISTRY
-    // Add a new object here each day as you publish a new episode!
-    // =========================================================================
-    const SIMULATIONS = [
-      {
-        day: 1,
-        phase: 1,
-        phaseLabel: 'Matter & Gravity',
-        title: 'Point-Mass Gravity Sandbox',
-        engine: 'Newtonian N-Body Integration',
-        hook: 'Click-and-drag to sling planets into orbit and test binary star stability.',
-        status: 'live'
-      },
-      {
-        day: 2,
-        phase: 1,
-        phaseLabel: 'Matter & Gravity',
-        title: '2D Rigid-Body Matter & Collisions',
-        engine: 'Impulse Elastic/Inelastic Solver',
-        hook: 'Toggle restitution and friction while dropping rock, rubber, and ice blocks.',
-        status: 'upcoming'
-      },
-      {
-        day: 3,
-        phase: 1,
-        phaseLabel: 'Matter & Gravity',
-        title: 'States of Matter (Solid, Liquid, Gas)',
-        engine: 'Lennard-Jones Interatomic Potential',
-        hook: 'Drag a single temperature slider to melt a crystal lattice and boil it into gas.',
-        status: 'upcoming'
-      },
-      {
-        day: 9,
-        phase: 1,
-        phaseLabel: 'Matter & Gravity',
-        title: 'Granular Matter & Falling Sand',
-        engine: 'Cellular Automata + Angle of Repose',
-        hook: 'Pour sand, gravel, and stone to build natural dune slopes and avalanches.',
-        status: 'upcoming'
-      },
-      {
-        day: 12,
-        phase: 1,
-        phaseLabel: 'Matter & Gravity',
-        title: 'Blackbody Radiation & Planetary Albedo',
-        engine: 'Stefan-Boltzmann Radiative Balance',
-        hook: 'Adjust ice reflectivity and solar flux to locate snowball-Earth tipping points.',
-        status: 'upcoming'
-      },
-      {
-        day: 21,
-        phase: 2,
-        phaseLabel: 'Fluids & Weather',
-        title: '2D Eulerian Smoke & Airflow',
-        engine: 'Navier-Stokes Stable Fluids',
-        hook: 'Drag through a wind tunnel and place airfoils to shed swirling Karman vortices.',
-        status: 'upcoming'
-      },
-      {
-        day: 24,
-        phase: 2,
-        phaseLabel: 'Fluids & Weather',
-        title: 'Coriolis Effect & Cyclones',
-        engine: 'Rotating Frame + Pressure Gradients',
-        hook: 'Flip hemispheres and watch low-pressure storms spin opposite directions.',
-        status: 'upcoming'
-      },
-      {
-        day: 31,
-        phase: 2,
-        phaseLabel: 'Fluids & Weather',
-        title: 'Greenhouse Gas Radiative Trapping',
-        engine: 'IR Photon Ray-Tracing + Absorption',
-        hook: 'Dial CO2 from 280 ppm to 800 ppm and observe planetary heat retention.',
-        status: 'upcoming'
-      },
-      {
-        day: 40,
-        phase: 2,
-        phaseLabel: 'Fluids & Weather',
-        title: 'AI Radar Rain Nowcaster',
-        engine: 'Browser Neural Net on Live Fluid Cells',
-        hook: 'Pit a live-trained AI 10-step storm forecast against actual fluid advection.',
-        status: 'upcoming'
-      },
-      {
-        day: 42,
-        phase: 3,
-        phaseLabel: 'Terrain & Earth',
-        title: 'Hydraulic Erosion & River Valleys',
-        engine: 'Droplet Sediment Transport',
-        hook: 'Release 50,000 virtual raindrops to carve branching canyons into noise terrain.',
-        status: 'upcoming'
-      },
-      {
-        day: 55,
-        phase: 3,
-        phaseLabel: 'Terrain & Earth',
-        title: 'Wildfire Spread & Fuel Moisture',
-        engine: 'Rothermel Cellular Grid + Wind Field',
-        hook: 'Carve firebreaks and test prescribed burns before a dry windstorm hits.',
-        status: 'upcoming'
-      },
-      {
-        day: 62,
-        phase: 4,
-        phaseLabel: 'Ecosystems & Swarms',
-        title: 'Boids Flocking & Murmurations',
-        engine: 'Separation, Alignment & Cohesion',
-        hook: 'Drop a circling hawk into 500 starlings to watch split-second evasion waves.',
-        status: 'upcoming'
-      },
-      {
-        day: 65,
-        phase: 4,
-        phaseLabel: 'Ecosystems & Swarms',
-        title: 'Neuroevolution Herbivores',
-        engine: 'Feedforward Neural Net + Genetic Algo',
-        hook: 'Watch blind agents evolve ray-casted vision and foraging in 20 generations.',
-        status: 'upcoming'
-      },
-      {
-        day: 82,
-        phase: 5,
-        phaseLabel: 'Human & Climate AI',
-        title: 'AI Wildfire Drone Swarm',
-        engine: 'Multi-Agent RL Task Allocation',
-        hook: 'Coordinate thermal scout drones and water-drop bots against a shifting fire front.',
-        status: 'upcoming'
-      },
-      {
-        day: 100,
-        phase: 5,
-        phaseLabel: 'Human & Climate AI',
-        title: 'The Living Planet (Grand Finale)',
-        engine: 'Unified Terrain + Weather + AI Stewards',
-        hook: 'Combine your favorite engines from Days 1–99 into one playable mini-Earth.',
-        status: 'upcoming'
-      }
-    ];
+    const canvas = document.getElementById('ambientCanvas');
+    const ctx = canvas.getContext('2d');
+    let orbiters = [];
 
-    // State
-    let activePhase = 'all';
-    let searchTerm = '';
-    let liveOnly = false;
-
-    const simGrid = document.getElementById('simGrid');
-    const resultsMeta = document.getElementById('resultsMeta');
-    const searchInput = document.getElementById('searchInput');
-    const toggleLiveOnlyBtn = document.getElementById('toggleLiveOnlyBtn');
-    const liveOnlyDot = document.getElementById('liveOnlyDot');
-
-    function padDay(n) {
-      return String(n).padStart(3, '0');
-    }
-
-    function renderGrid() {
-      const q = searchTerm.trim().toLowerCase();
-      const filtered = SIMULATIONS.filter((item) => {
-        const matchesPhase = activePhase === 'all' || String(item.phase) === activePhase;
-        const matchesLive = !liveOnly || item.status === 'live';
-        const matchesQuery = !q ||
-          item.title.toLowerCase().includes(q) ||
-          item.engine.toLowerCase().includes(q) ||
-          item.hook.toLowerCase().includes(q) ||
-          item.phaseLabel.toLowerCase().includes(q) ||
-          ('day ' + item.day).includes(q);
-        return matchesPhase && matchesLive && matchesQuery;
-      });
-
-      resultsMeta.textContent = `Showing ${filtered.length} of ${SIMULATIONS.length} featured simulations`;
-
-      if (filtered.length === 0) {
-        simGrid.innerHTML = `
-          <div class="col-span-full rounded-2xl border border-emerald-500/15 bg-pine/60 p-10 text-center">
-            <p class="text-sm font-medium text-emerald-100">No simulations match that filter yet.</p>
-            <button id="resetFiltersBtn" type="button" class="mt-3 rounded-lg border border-emerald-400/40 px-3 py-1.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/15">Reset filters</button>
-          </div>
-        `;
-        const resetBtn = document.getElementById('resetFiltersBtn');
-        if (resetBtn) {
-          resetBtn.addEventListener('click', () => {
-            activePhase = 'all';
-            searchTerm = '';
-            liveOnly = false;
-            searchInput.value = '';
-            syncFilterUI();
-            renderGrid();
-          });
-        }
-        return;
-      }
-
-      simGrid.innerHTML = filtered.map((sim) => {
-        const isLive = sim.status === 'live';
-        const badgeClass = isLive
-          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40'
-          : 'bg-obsidian/80 text-emerald-200/60 border-emerald-500/15';
-        const actionLabel = isLive ? 'Launch Sandbox' : 'Preview Spec';
-        return `
-          <article class="card-hover flex flex-col justify-between rounded-2xl border ${isLive ? 'border-emerald-400/45 bg-pine' : 'border-emerald-500/15 bg-pine/65'} p-5">
-            <div>
-              <div class="flex items-center justify-between gap-2">
-                <span class="font-mono text-xs font-semibold text-emerald-400">DAY ${padDay(sim.day)}</span>
-                <span class="rounded-full border px-2.5 py-0.5 font-mono text-[11px] font-medium ${badgeClass}">
-                  ${isLive ? 'LIVE' : 'QUEUED'}
-                </span>
-              </div>
-              <h3 class="mt-3 text-lg font-bold text-white leading-snug">${sim.title}</h3>
-              <p class="mt-1 text-xs font-medium text-amber-300/90">${sim.engine}</p>
-              <p class="mt-2.5 text-sm leading-relaxed text-emerald-100/75">${sim.hook}</p>
-            </div>
-            <div class="mt-5 flex items-center justify-between border-t border-emerald-500/10 pt-3.5">
-              <span class="text-xs text-emerald-200/55">Phase ${sim.phase} · ${sim.phaseLabel}</span>
-              <button type="button" data-open-day="${sim.day}" class="inline-flex items-center gap-1 rounded-lg ${isLive ? 'bg-emerald-500 text-obsidian hover:bg-emerald-400' : 'border border-emerald-500/25 text-emerald-200 hover:border-emerald-400'} px-3 py-1.5 text-xs font-semibold transition">
-                ${actionLabel}
-              </button>
-            </div>
-          </article>
-        `;
-      }).join('');
-    }
-
-    function syncFilterUI() {
-      document.querySelectorAll('.phase-btn').forEach((btn) => {
-        const isMatch = btn.dataset.phase === activePhase;
-        btn.className = isMatch
-          ? 'phase-btn rounded-lg border border-emerald-400 bg-emerald-500/20 px-3.5 py-1.5 text-xs font-semibold text-emerald-200 transition'
-          : 'phase-btn rounded-lg border border-emerald-500/20 bg-pine px-3.5 py-1.5 text-xs font-medium text-emerald-100/75 transition hover:border-emerald-400/40';
-      });
-      liveOnlyDot.className = liveOnly
-        ? 'h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]'
-        : 'h-2 w-2 rounded-full bg-emerald-500/35';
-    }
-
-    document.getElementById('phaseFilters').addEventListener('click', (e) => {
-      const btn = e.target.closest('.phase-btn');
-      if (!btn) return;
-      activePhase = btn.dataset.phase;
-      syncFilterUI();
-      renderGrid();
-    });
-
-    searchInput.addEventListener('input', (e) => {
-      searchTerm = e.target.value;
-      renderGrid();
-    });
-
-    toggleLiveOnlyBtn.addEventListener('click', () => {
-      liveOnly = !liveOnly;
-      syncFilterUI();
-      renderGrid();
-    });
-
-    // Event delegation for simulation cards
-    simGrid.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-open-day]');
-      if (!btn) return;
-      const day = Number(btn.dataset.openDay);
-      const sim = SIMULATIONS.find((s) => s.day === day);
-      if (!sim) return;
-      if (sim.day === 1) {
-        openSandboxModal();
-      } else {
-        openInfoModal(sim);
-      }
-    });
-
-    // Info Modal
-    const infoModal = document.getElementById('infoModal');
-    function openInfoModal(sim) {
-      document.getElementById('infoDayBadge').textContent = `DAY ${padDay(sim.day)} · PHASE ${sim.phase}`;
-      document.getElementById('infoTitle').textContent = sim.title;
-      document.getElementById('infoEngine').textContent = sim.engine;
-      document.getElementById('infoHook').textContent = sim.hook;
-      infoModal.classList.remove('hidden');
-      infoModal.classList.add('flex');
-    }
-    function closeInfoModal() {
-      infoModal.classList.add('hidden');
-      infoModal.classList.remove('flex');
-    }
-    document.getElementById('closeInfoBtn').addEventListener('click', closeInfoModal);
-    infoModal.addEventListener('click', (e) => { if (e.target === infoModal) closeInfoModal(); });
-
-    // =========================================================================
-    // AMBIENT HERO GRAVITY FIELD CANVAS
-    // =========================================================================
-    const heroCanvas = document.getElementById('heroCanvas');
-    const heroCtx = heroCanvas.getContext('2d');
-    let heroParticles = [];
-    let heroMouse = { x: -999, y: -999, active: false };
-
-    function initHeroCanvas() {
-      const rect = heroCanvas.parentElement.getBoundingClientRect();
+    function resize() {
+      const w = canvas.parentElement.clientWidth || window.innerWidth;
+      const h = canvas.parentElement.clientHeight || window.innerHeight;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      heroCanvas.width = Math.max(1, Math.floor(rect.width * dpr));
-      heroCanvas.height = Math.max(1, Math.floor(rect.height * dpr));
-      heroCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      canvas.width = Math.max(1, Math.floor(w * dpr));
+      canvas.height = Math.max(1, Math.floor(h * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(75, Math.max(35, Math.floor(rect.width / 18)));
-      heroParticles = Array.from({ length: count }, () => ({
-        x: Math.random() * rect.width,
-        y: Math.random() * rect.height,
-        vx: (Math.random() - 0.5) * 0.45,
-        vy: (Math.random() - 0.5) * 0.45,
-        r: Math.random() * 2 + 1.1,
-        hue: Math.random() > 0.8 ? '#F59E0B' : '#34D399'
+      const maxR = Math.min(w, h) * 0.44;
+      orbiters = Array.from({ length: 28 }, (_, i) => ({
+        radius: 65 + (i / 28) * maxR,
+        angle: Math.random() * Math.PI * 2,
+        speed: (0.0012 + Math.random() * 0.0022) * (i % 2 === 0 ? 1 : -1),
+        size: Math.random() * 2 + 1,
+        color: i % 5 === 0 ? 'rgba(251, 191, 36, 0.7)' : 'rgba(52, 211, 153, 0.55)'
       }));
     }
 
-    function animateHero() {
-      const w = heroCanvas.parentElement.clientWidth;
-      const h = heroCanvas.parentElement.clientHeight;
-      heroCtx.clearRect(0, 0, w, h);
-
-      for (let i = 0; i < heroParticles.length; i++) {
-        const p = heroParticles[i];
-        if (heroMouse.active) {
-          const dx = heroMouse.x - p.x;
-          const dy = heroMouse.y - p.y;
-          const distSq = dx * dx + dy * dy + 900;
-          const force = 55 / distSq;
-          p.vx += dx * force * 0.04;
-          p.vy += dy * force * 0.04;
-        }
-        p.vx *= 0.992;
-        p.vy *= 0.992;
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.x < 0) p.x = w;
-        if (p.x > w) p.x = 0;
-        if (p.y < 0) p.y = h;
-        if (p.y > h) p.y = 0;
-
-        for (let j = i + 1; j < heroParticles.length; j++) {
-          const q = heroParticles[j];
-          const dx = p.x - q.x;
-          const dy = p.y - q.y;
-          const d = Math.hypot(dx, dy);
-          if (d < 115) {
-            heroCtx.strokeStyle = `rgba(16, 185, 129, ${(1 - d / 115) * 0.22})`;
-            heroCtx.lineWidth = 1;
-            heroCtx.beginPath();
-            heroCtx.moveTo(p.x, p.y);
-            heroCtx.lineTo(q.x, q.y);
-            heroCtx.stroke();
-          }
-        }
-
-        heroCtx.fillStyle = p.hue;
-        heroCtx.beginPath();
-        heroCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        heroCtx.fill();
-      }
-      requestAnimationFrame(animateHero);
-    }
-
-    heroCanvas.parentElement.addEventListener('mousemove', (e) => {
-      const rect = heroCanvas.getBoundingClientRect();
-      heroMouse.x = e.clientX - rect.left;
-      heroMouse.y = e.clientY - rect.top;
-      heroMouse.active = true;
-    });
-    heroCanvas.parentElement.addEventListener('mouseleave', () => {
-      heroMouse.active = false;
-    });
-
-    // =========================================================================
-    // DAY 001: POINT-MASS GRAVITY SANDBOX (FULL INTERACTIVE ENGINE)
-    // =========================================================================
-    const sandboxModal = document.getElementById('sandboxModal');
-    const gravCanvas = document.getElementById('gravityCanvas');
-    const gCtx = gravCanvas.getContext('2d');
-    const bodyCountReadout = document.getElementById('bodyCountReadout');
-    const simPlayPauseBtn = document.getElementById('simPlayPauseBtn');
-    const gravitySlider = document.getElementById('gravitySlider');
-    const gravityVal = document.getElementById('gravityVal');
-    const massSlider = document.getElementById('massSlider');
-    const massVal = document.getElementById('massVal');
-    const trailsToggle = document.getElementById('trailsToggle');
-
-    let bodies = [];
-    let simRunning = true;
-    let simAnimId = null;
-    let gravityStrength = 1.0;
-    let spawnMass = 6;
-    let showTrails = true;
-    let dragStart = null;
-    let dragCurrent = null;
-
-    const COLORS = ['#34D399', '#38BDF8', '#FBBF24', '#A78BFA', '#FB7185', '#2DD4BF'];
-
-    function resizeGravityCanvas() {
-      const rect = gravCanvas.parentElement.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      gravCanvas.width = Math.max(1, Math.floor(rect.width * dpr));
-      gravCanvas.height = Math.max(1, Math.floor(rect.height * dpr));
-      gCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    function loadSolarPreset() {
-      const w = gravCanvas.parentElement.clientWidth || 800;
-      const h = gravCanvas.parentElement.clientHeight || 480;
+    function animate() {
+      const w = canvas.parentElement.clientWidth;
+      const h = canvas.parentElement.clientHeight;
       const cx = w / 2;
       const cy = h / 2;
-      bodies = [
-        { x: cx, y: cy, vx: 0, vy: 0, m: 240, r: 16, color: '#F59E0B', trail: [] },
-        { x: cx + 115, y: cy, vx: 0, vy: -1.45, m: 5, r: 5, color: '#38BDF8', trail: [] },
-        { x: cx - 185, y: cy, vx: 0, vy: 1.15, m: 9, r: 6.5, color: '#34D399', trail: [] },
-        { x: cx, y: cy - 245, vx: 1.0, vy: 0, m: 12, r: 7.5, color: '#A78BFA', trail: [] }
-      ];
-      bodyCountReadout.textContent = bodies.length;
-    }
+      ctx.clearRect(0, 0, w, h);
 
-    function loadBinaryPreset() {
-      const w = gravCanvas.parentElement.clientWidth || 800;
-      const h = gravCanvas.parentElement.clientHeight || 480;
-      const cx = w / 2;
-      const cy = h / 2;
-      bodies = [
-        { x: cx - 75, y: cy, vx: 0, vy: -0.9, m: 140, r: 13, color: '#F59E0B', trail: [] },
-        { x: cx + 75, y: cy, vx: 0, vy: 0.9, m: 140, r: 13, color: '#38BDF8', trail: [] },
-        { x: cx, y: cy - 205, vx: 1.25, vy: 0, m: 4, r: 4.5, color: '#34D399', trail: [] }
-      ];
-      bodyCountReadout.textContent = bodies.length;
-    }
-
-    function stepGravity() {
-      const w = gravCanvas.parentElement.clientWidth;
-      const h = gravCanvas.parentElement.clientHeight;
-      gCtx.fillStyle = showTrails ? 'rgba(7, 13, 11, 0.25)' : '#070D0B';
-      gCtx.fillRect(0, 0, w, h);
-
-      if (simRunning) {
-        const G = 1.0 * gravityStrength;
-        const softening = 18;
-        for (let i = 0; i < bodies.length; i++) {
-          for (let j = i + 1; j < bodies.length; j++) {
-            const a = bodies[i];
-            const b = bodies[j];
-            const dx = b.x - a.x;
-            const dy = b.y - a.y;
-            const distSq = dx * dx + dy * dy + softening * softening;
-            const dist = Math.sqrt(distSq);
-            const force = (G * a.m * b.m) / distSq;
-            const fx = (force * dx) / dist;
-            const fy = (force * dy) / dist;
-            a.vx += fx / a.m;
-            a.vy += fy / a.m;
-            b.vx -= fx / b.m;
-            b.vy -= fy / b.m;
-          }
-        }
-        for (const b of bodies) {
-          b.x += b.vx;
-          b.y += b.vy;
-          if (showTrails) {
-            b.trail.push({ x: b.x, y: b.y });
-            if (b.trail.length > 70) b.trail.shift();
-          } else {
-            b.trail.length = 0;
-          }
-        }
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
+      ctx.lineWidth = 1;
+      for (let r = 110; r < Math.min(w, h) * 0.48; r += 85) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
       }
 
-      // Draw trails and bodies
-      for (const b of bodies) {
-        if (showTrails && b.trail.length > 1) {
-          gCtx.strokeStyle = b.color + '66';
-          gCtx.lineWidth = 1.5;
-          gCtx.beginPath();
-          gCtx.moveTo(b.trail[0].x, b.trail[0].y);
-          for (let k = 1; k < b.trail.length; k++) {
-            gCtx.lineTo(b.trail[k].x, b.trail[k].y);
-          }
-          gCtx.stroke();
-        }
-        gCtx.fillStyle = b.color;
-        gCtx.beginPath();
-        gCtx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        gCtx.fill();
+      for (const o of orbiters) {
+        o.angle += o.speed;
+        ctx.fillStyle = o.color;
+        ctx.beginPath();
+        ctx.arc(cx + Math.cos(o.angle) * o.radius, cy + Math.sin(o.angle) * o.radius, o.size, 0, Math.PI * 2);
+        ctx.fill();
       }
-
-      // Draw sling vector if dragging
-      if (dragStart && dragCurrent) {
-        gCtx.strokeStyle = '#34D399';
-        gCtx.setLineDash([5, 4]);
-        gCtx.lineWidth = 1.5;
-        gCtx.beginPath();
-        gCtx.moveTo(dragStart.x, dragStart.y);
-        gCtx.lineTo(dragCurrent.x, dragCurrent.y);
-        gCtx.stroke();
-        gCtx.setLineDash([]);
-        gCtx.fillStyle = '#34D399';
-        gCtx.beginPath();
-        gCtx.arc(dragStart.x, dragStart.y, Math.max(4, Math.sqrt(spawnMass) * 2.2), 0, Math.PI * 2);
-        gCtx.fill();
-      }
-
-      simAnimId = requestAnimationFrame(stepGravity);
+      requestAnimationFrame(animate);
     }
 
-    function openSandboxModal() {
-      sandboxModal.classList.remove('hidden');
-      sandboxModal.classList.add('flex');
-      resizeGravityCanvas();
-      if (bodies.length === 0) loadSolarPreset();
-      if (simAnimId) cancelAnimationFrame(simAnimId);
-      simRunning = true;
-      simPlayPauseBtn.textContent = 'Pause';
-      stepGravity();
-    }
-
-    function closeSandboxModal() {
-      sandboxModal.classList.add('hidden');
-      sandboxModal.classList.remove('flex');
-      if (simAnimId) {
-        cancelAnimationFrame(simAnimId);
-        simAnimId = null;
-      }
-    }
-
-    function getCanvasPos(evt) {
-      const rect = gravCanvas.getBoundingClientRect();
-      const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
-      const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
-      return { x: clientX - rect.left, y: clientY - rect.top };
-    }
-
-    gravCanvas.addEventListener('pointerdown', (e) => {
-      dragStart = getCanvasPos(e);
-      dragCurrent = dragStart;
-    });
-    gravCanvas.addEventListener('pointermove', (e) => {
-      if (!dragStart) return;
-      dragCurrent = getCanvasPos(e);
-    });
-    gravCanvas.addEventListener('pointerup', () => {
-      if (!dragStart || !dragCurrent) return;
-      const vx = (dragStart.x - dragCurrent.x) * 0.035;
-      const vy = (dragStart.y - dragCurrent.y) * 0.035;
-      bodies.push({
-        x: dragStart.x,
-        y: dragStart.y,
-        vx,
-        vy,
-        m: spawnMass,
-        r: Math.max(4, Math.sqrt(spawnMass) * 2.2),
-        color: COLORS[bodies.length % COLORS.length],
-        trail: []
-      });
-      bodyCountReadout.textContent = bodies.length;
-      dragStart = null;
-      dragCurrent = null;
-    });
-
-    document.getElementById('openDay1NavBtn').addEventListener('click', openSandboxModal);
-    document.getElementById('openDay1HeroBtn').addEventListener('click', openSandboxModal);
-    document.getElementById('openDay1FooterBtn').addEventListener('click', openSandboxModal);
-    document.getElementById('closeSandboxBtn').addEventListener('click', closeSandboxModal);
-    sandboxModal.addEventListener('click', (e) => { if (e.target === sandboxModal) closeSandboxModal(); });
-
-    simPlayPauseBtn.addEventListener('click', () => {
-      simRunning = !simRunning;
-      simPlayPauseBtn.textContent = simRunning ? 'Pause' : 'Play';
-    });
-    document.getElementById('presetSolarBtn').addEventListener('click', loadSolarPreset);
-    document.getElementById('presetBinaryBtn').addEventListener('click', loadBinaryPreset);
-    document.getElementById('presetClearBtn').addEventListener('click', () => {
-      bodies = [];
-      bodyCountReadout.textContent = '0';
-    });
-    gravitySlider.addEventListener('input', (e) => {
-      gravityStrength = parseFloat(e.target.value);
-      gravityVal.textContent = gravityStrength.toFixed(1) + 'x';
-    });
-    massSlider.addEventListener('input', (e) => {
-      spawnMass = parseInt(e.target.value, 10);
-      massVal.textContent = String(spawnMass);
-    });
-    trailsToggle.addEventListener('change', (e) => {
-      showTrails = e.target.checked;
-    });
-
-    window.addEventListener('resize', () => {
-      initHeroCanvas();
-      if (!sandboxModal.classList.contains('hidden')) {
-        resizeGravityCanvas();
-      }
-    });
-
-    // Boot
+    window.addEventListener('resize', resize);
     window.addEventListener('load', () => {
       if (window.lucide) window.lucide.createIcons();
-      renderGrid();
-      initHeroCanvas();
-      animateHero();
+      resize();
+      animate();
     });
   </script>
 </body>
